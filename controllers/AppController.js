@@ -1,14 +1,15 @@
-const redis = require('../utils/redis.js');
-const db = require('../utils/db.js');
-
+const redis = require('../utils/redis');
+const db = require('../utils/db');
 
 export function getStatus(req, res) {
-	if (redis.isAlive() && db.isAlive()) {
-		res.status(200).send('{ "redis": true, "db": true }');
-	}
+  if (redis.isAlive() && db.isAlive()) {
+    res.status(200).send('{ "redis": true, "db": true }');
+  }
 }
 
-export function getStats(req, res) {
-	const stats = `{ "users": ${db.nbUsers}, "files": ${db.nbFiles} }`;
-	res.status(200).send(stats);
+export async function getStats(req, res) {
+  const nbUsers = await db.nbUsers();
+  const nbFiles = await db.nbFiles();
+  const stats = `{ "users": ${nbUsers}, "files": ${nbFiles} }`;
+  res.status(200).send(stats);
 }

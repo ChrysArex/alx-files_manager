@@ -1,8 +1,21 @@
 const express = require('express');
-const endpoints = require('../controllers/AppController');
+const app = require('../controllers/AppController');
+const user = require('../controllers/UsersController');
+const auth = require('../controllers/AuthController');
+const file = require('../controllers/FilesController');
+
 const router = express.Router();
 
-router.get('/status', endpoints.getStatus);
-router.get('/stats', endpoints.getStats);
+router.use(express.json());
 
-export {router};
+router.get('/status', app.getStatus);
+router.get('/stats', app.getStats);
+router.get('/connect', auth.getConnect);
+router.get('/disconnect', auth.getDisconnect);
+router.get('/users/me', user.getMe);
+router.get('/files/:id', file.getShow);
+//router.get('/files', file.getIndex);
+router.post('/users', user.postNew);
+router.post('/files', file.postUpload);
+
+export { router };
